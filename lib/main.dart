@@ -39,6 +39,13 @@ class MyHomePage extends StatelessWidget {
     Transaction(id: "2", title: "title2", amount: 2.9, date: DateTime.now()),
   ];
 
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
+
+  addTransaction() {
+//todo
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +53,7 @@ class MyHomePage extends StatelessWidget {
         title: Text("flutter_02"),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Card(
@@ -55,6 +62,33 @@ class MyHomePage extends StatelessWidget {
               width: double.infinity,
               child: Text(
                 "CHART!",
+              ),
+            ),
+            elevation: 5,
+          ),
+          Card(
+            child: Container(
+              margin: EdgeInsets.all(8),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextField(
+                    decoration: InputDecoration(labelText: "Title"),
+                    controller: titleController,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: "Amount \$.\$\$"),
+                    controller: amountController,
+                    onChanged: (input) => {print("onChanged: input=${amountController.text}")},
+                    onEditingComplete: () => {print("onEditingComplete")},
+                    onSubmitted: (input) => {print("onSubmitted: input=$input")},
+                  ),
+                  ElevatedButton(
+                    child: Text("Add transaction"),
+                    onPressed: addTransaction,
+                  ),
+                ],
               ),
             ),
             elevation: 5,
