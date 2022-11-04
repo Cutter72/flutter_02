@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_02/transaction.dart';
+import 'package:flutter_02/widgets/user_transactions.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
@@ -34,17 +34,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<Transaction> _transactions = [
-    Transaction(id: "1", title: "title1", amount: 1.99, date: DateTime.now()),
-    Transaction(id: "2", title: "title2", amount: 2.9, date: DateTime.now()),
-  ];
-
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
-
-  addTransaction() {
-//todo
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,96 +55,7 @@ class MyHomePage extends StatelessWidget {
             ),
             elevation: 5,
           ),
-          Card(
-            child: Container(
-              margin: EdgeInsets.all(8),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextField(
-                    decoration: InputDecoration(labelText: "Title"),
-                    controller: titleController,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(labelText: "Amount \$.\$\$"),
-                    controller: amountController,
-                    onChanged: (input) => {print("onChanged: input=${amountController.text}")},
-                    onEditingComplete: () => {print("onEditingComplete")},
-                    onSubmitted: (input) => {print("onSubmitted: input=$input")},
-                  ),
-                  ElevatedButton(
-                    child: Text("Add transaction"),
-                    onPressed: addTransaction,
-                  ),
-                ],
-              ),
-            ),
-            elevation: 5,
-          ),
-          Column(
-            children: _transactions.map((tx) {
-              return Card(
-                elevation: 5,
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          border: Border.all(color: Colors.purple, width: 2)),
-                      child: Text(
-                        maxLines: 1,
-                        style: TextStyle(color: Colors.purple, fontSize: 18, fontWeight: FontWeight.bold),
-                        "\$${tx.amount}",
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                            child: Text(
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                color: Colors.blueAccent,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
-                              ),
-                              tx.title.toUpperCase(),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                                  "${DateFormat.Hms(Intl.systemLocale).format(tx.date)}",
-                                ),
-                                Text(
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                                  "${DateFormat.yMMMd(Intl.systemLocale).format(tx.date)}",
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+          UserTransactions(),
         ],
       ),
     );
