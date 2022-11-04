@@ -41,9 +41,9 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text("flutter_02"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: ListView(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Card(
             color: Colors.blue,
