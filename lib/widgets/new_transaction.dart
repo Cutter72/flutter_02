@@ -4,15 +4,21 @@ import 'package:flutter_02/models/transaction.dart';
 ///
 /// @author Paweł Drelich <drelich_pawel@o2.pl>
 ///
-class NewTransaction extends StatelessWidget {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
-
+class NewTransaction extends StatefulWidget {
   late final Function(Transaction) _addTransaction;
 
   NewTransaction(Function(Transaction) addTransaction) {
     _addTransaction = addTransaction;
   }
+
+  @override
+  State<NewTransaction> createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+  final titleController = TextEditingController();
+
+  final amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,7 @@ class NewTransaction extends StatelessWidget {
               controller: amountController,
               onChanged: (input) => {print("onChanged: input=${amountController.text}")},
               onEditingComplete: () => {print("onEditingComplete")},
-              onSubmitted: (input) => {print("onSubmitted: input=$input")},
+              onSubmitted: (input) => {submitTransaction()},
             ),
             ElevatedButton(
               child: Text("Add transaction"),
@@ -50,7 +56,8 @@ class NewTransaction extends StatelessWidget {
     if (titleController.text.isEmpty || amountController.text.isEmpty) {
       return;
     } else {
-      _addTransaction(Transaction(title: titleController.text, amount: double.tryParse(amountController.text)));
+      widget._addTransaction(Transaction(title: titleController.text, amount: double.tryParse(amountController.text)));
     }
+    Navigator.of(context).pop();
   }
 }

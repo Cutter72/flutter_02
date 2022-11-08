@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_02/widgets/user_transactions.dart';
+import 'package:flutter_02/models/transaction.dart';
+import 'package:flutter_02/widgets/new_transaction.dart';
+import 'package:flutter_02/widgets/transaction_list.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
@@ -33,13 +35,38 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Transaction> _transactions = [
+    Transaction(title: "title1", amount: 1.99),
+    Transaction(title: "title2", amount: 2.9),
+  ];
+
+  void _addTransaction(Transaction transaction) {
+    setState(() {
+      _transactions.add(transaction);
+    });
+  }
+
+  void _startAddNewTransaction(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (cCtx) {
+          return GestureDetector(
+              onTap: () {}, behavior: HitTestBehavior.opaque, child: NewTransaction(_addTransaction));
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("flutter_02"),
+        actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
       ),
       body: ListView(
         // mainAxisAlignment: MainAxisAlignment.start,
@@ -55,9 +82,12 @@ class MyHomePage extends StatelessWidget {
             ),
             elevation: 5,
           ),
-          UserTransactions(),
+          TransactionList(_transactions),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton:
+          FloatingActionButton(onPressed: () => _startAddNewTransaction(context), child: Icon(Icons.add)),
     );
   }
 }
