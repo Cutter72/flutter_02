@@ -25,9 +25,9 @@ class Chart extends StatelessWidget {
       }
       weekAmountSum += dayAmountSum;
       return {'day': DateFormat.E(Intl.systemLocale).format(weekDay), 'amount': dayAmountSum};
-    }).map((e) {
-      e['percent'] = weekAmountSum == 0.0 ? 0.0 : (e['amount'] as double) / weekAmountSum;
-      return e;
+    }).map((dayData) {
+      dayData['percent'] = weekAmountSum == 0.0 ? 0.0 : (dayData['amount'] as double) / weekAmountSum;
+      return dayData;
     }).toList();
   }
 
@@ -42,14 +42,17 @@ class Chart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ...summaryTransactionsPerDay
-                .map((e) {
+                .map((dayData) {
                   return Flexible(
                     fit: FlexFit.tight,
                     child: Column(
                       children: [
-                        Text("\$${(e['amount'] as double).toStringAsFixed(0)}"),
-                        ChartBar(e['percent'] as double),
-                        Text("${e['day']}"),
+                        SizedBox(
+                          height: 20,
+                          child: FittedBox(child: Text("\$${(dayData['amount'] as double).toStringAsFixed(0)}")),
+                        ),
+                        ChartBar(dayData['percent'] as double),
+                        Text("${dayData['day']}"),
                       ],
                     ),
                   );

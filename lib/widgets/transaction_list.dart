@@ -39,16 +39,21 @@ class TransactionList extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       Container(
+                        constraints: BoxConstraints(maxWidth: 120),
                         margin: EdgeInsets.all(8),
                         padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(4)),
                             border: Border.all(color: Theme.of(context).primaryColor, width: 2)),
-                        child: Text(
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.bold),
-                          "\$${_transactions[i].amount.toStringAsFixed(2)}",
+                        child: SizedBox(height: 20,
+                          child: FittedBox(
+                            child: Text(
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.bold),
+                              "\$${_transactions[i].amount.toStringAsFixed(2)}",
+                            ),
+                          ),
                         ),
                       ),
                       Expanded(
