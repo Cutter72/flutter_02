@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_02/models/transaction.dart';
+import 'package:flutter_02/widgets/chart.dart';
 import 'package:flutter_02/widgets/new_transaction.dart';
 import 'package:flutter_02/widgets/transaction_list.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -90,16 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Card(
-            color: Theme.of(context).primaryColor,
-            child: Container(
-              width: double.infinity,
-              child: Text(
-                "CHART!",
-              ),
-            ),
-            elevation: 5,
-          ),
+          Chart(),
           TransactionList(_transactions),
         ],
       ),
