@@ -36,7 +36,54 @@ class TransactionList extends StatelessWidget {
               itemBuilder: (context, i) {
                 return Card(
                   elevation: 5,
-                  child: Row(
+                    child: ListTile(
+                      horizontalTitleGap: 0,
+                      trailing: Icon(Icons.delete_forever),
+                      contentPadding: EdgeInsets.zero,
+                      leading: Container(
+                        constraints: BoxConstraints(maxWidth: 120),
+                        margin: EdgeInsets.all(8),
+                        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                            border: Border.all(color: Theme.of(context).primaryColor, width: 2)),
+                        child: SizedBox(height: 20,
+                          child: FittedBox(
+                            child: Text(
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.bold),
+                              "\$${_transactions[i].amount.toStringAsFixed(2)}",
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        textAlign: TextAlign.justify,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(color: Theme.of(context).primaryColor),
+                        _transactions[i].title.toUpperCase(),
+                      ),
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                            "${DateFormat.Hms(Intl.systemLocale).format(_transactions[i].date)}",
+                          ),
+                          Text(
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                            "${DateFormat.yMMMd(Intl.systemLocale).format(_transactions[i].date)}",
+                          ),
+                        ],
+                      ),
+                    ),
+                  /*Row(
                     children: <Widget>[
                       Container(
                         constraints: BoxConstraints(maxWidth: 120),
@@ -95,7 +142,7 @@ class TransactionList extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
+                  ),*/
                 );
               },
             ),
