@@ -65,6 +65,18 @@ class _MyHomePageState extends State<MyHomePage> {
     // Transaction(title: "title2", amount: 2.9),
   ];
 
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((transaction) {
+      final borderDateTime = DateTime.now().subtract(Duration(days: 7));
+      if (transaction.date.day >= borderDateTime.day &&
+          transaction.date.month >= borderDateTime.month &&
+          transaction.date.year >= borderDateTime.year) {
+        return true;
+      }
+      return false;
+    }).toList();
+  }
+
   void _addTransaction(Transaction transaction) {
     setState(() {
       _transactions.add(transaction);
@@ -91,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Chart(),
+          Chart(_recentTransactions),
           TransactionList(_transactions),
         ],
       ),
