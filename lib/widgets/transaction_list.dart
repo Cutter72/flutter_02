@@ -12,14 +12,13 @@ class TransactionList extends StatelessWidget {
     _transactions = transactions;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 300,
       child: ListView.builder(
         itemCount: _transactions.length,
-        itemBuilder: (context, i){
+        itemBuilder: (context, i) {
           return Card(
             elevation: 5,
             child: Row(
@@ -45,12 +44,8 @@ class TransactionList extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                         child: Text(
                           textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).primaryColor),
                           _transactions[i].title.toUpperCase(),
                         ),
                       ),

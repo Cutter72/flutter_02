@@ -27,14 +27,18 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.purpleAccent),
         // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple),
+        textTheme: ThemeData.light().textTheme.copyWith(
+                titleMedium: TextStyle(
+              fontFamily: "OpenSans",
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            )),
         appBarTheme: AppBarTheme(
           titleTextStyle: ThemeData.light()
               .textTheme
               .copyWith(
-                titleLarge: TextStyle(
-                  fontFamily: "OpenSans",
-                  fontSize: 20,
-                ),
+                titleLarge: TextStyle(fontFamily: "OpenSans", fontSize: 20, fontWeight: FontWeight.bold),
               )
               .headline6,
         ),
