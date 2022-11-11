@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_02/models/transaction.dart';
+import 'package:flutter_02/widgets/chart_bar.dart';
 import 'package:intl/intl.dart';
 
 ///
@@ -11,6 +12,7 @@ class Chart extends StatelessWidget {
   const Chart(this.recentTransactions);
 
   List<Map<String, Object>> get summaryTransactionsPerDay {
+    var weekAmountSum = 0.0;
     return List.generate(7, (index) {
       final weekDay = DateTime.now().subtract(Duration(days: index));
       var dayAmountSum = 0.0;
@@ -21,8 +23,12 @@ class Chart extends StatelessWidget {
           dayAmountSum += transaction.amount;
         }
       }
+      weekAmountSum += dayAmountSum;
       return {'day': DateFormat.E(Intl.systemLocale).format(weekDay), 'amount': dayAmountSum};
-    });
+    }).map((e) {
+      e['percent'] = (e['amount'] as double)/ weekAmountSum;
+      return e;
+    }).toList();
   }
 
   @override
@@ -33,13 +39,18 @@ class Chart extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ...summaryTransactionsPerDay.map((e) => Column(
-            children: [
-              Text("\$${(e['amount'] as double).toStringAsFixed(0)}"),
-              Text("\$"),
-              Text("${e['day']}"),
-            ],
-          )).toList().reversed
+          ...summaryTransactionsPerDay
+              .map((e) {
+                return Column(
+                  children: [
+                    Text("\$${(e['amount'] as double).toStringAsFixed(0)}"),
+                    ChartBar(e['percent'] as double),
+                    Text("${e['day']}"),
+                  ],
+                );
+              })
+              .toList()
+              .reversed
         ],
       ),
     );
