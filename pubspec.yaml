@@ -60,6 +60,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+   - assets/images/empty_transaction_list.png
+
   fonts:
     - family: OpenSans
       fonts:

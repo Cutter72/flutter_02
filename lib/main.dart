@@ -60,8 +60,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    Transaction(title: "title1", amount: 1.99),
-    Transaction(title: "title2", amount: 2.9),
+    // Transaction(title: "title1", amount: 1.99),
+    // Transaction(title: "title2", amount: 2.9),
   ];
 
   void _addTransaction(Transaction transaction) {
