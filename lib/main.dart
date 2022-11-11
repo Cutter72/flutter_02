@@ -25,8 +25,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "QuickSand",
         primarySwatch: Colors.purple,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purpleAccent),
         // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: ThemeData.light()
+              .textTheme
+              .copyWith(
+                titleLarge: TextStyle(
+                  fontFamily: "OpenSans",
+                  fontSize: 20,
+                ),
+              )
+              .headline6,
+        ),
       ),
       home: MyHomePage(),
     );
