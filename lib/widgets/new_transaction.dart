@@ -20,6 +20,8 @@ class _NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
 
   final amountController = TextEditingController();
+  var today = DateTime.now();
+  var pickedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +53,14 @@ class _NewTransactionState extends State<NewTransaction> {
                     borderRadius: BorderRadius.all(Radius.circular(4)),
                     border: Border.all(color: Theme.of(context).disabledColor)),
                 child: TextButton(
-                  child: Text("Date: ${DateFormat.yMd(Intl.systemLocale).format(DateTime.now())}",
-                      textAlign: TextAlign.justify),
+                  child: Text("Date: ${DateFormat.yMd(Intl.systemLocale).format(pickedDate)}", textAlign: TextAlign.justify),
                   onPressed: () {
-                    final today = DateTime.now();
                     showDatePicker(
                             context: context, initialDate: today, firstDate: DateTime(today.year - 1), lastDate: today)
                         .then((pickedDate) {
-                      if (pickedDate != null) {}
+                      if (pickedDate != null) {
+                        savePickedDate(pickedDate);
+                      }
                     });
                   },
                 ),
@@ -72,6 +74,12 @@ class _NewTransactionState extends State<NewTransaction> {
         ),
       ),
     );
+  }
+
+  void savePickedDate(DateTime pickedDate) {
+    setState(() {
+      this.pickedDate = pickedDate;
+    });
   }
 
   submitTransaction() {
