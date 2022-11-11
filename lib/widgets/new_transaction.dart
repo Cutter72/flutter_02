@@ -53,11 +53,11 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 
   submitTransaction() {
-    if (titleController.text.isEmpty || amountController.text.isEmpty) {
-      return;
-    } else {
+    // if (titleController.text.isEmpty || amountController.text.isEmpty) {
+    //   return;
+    // } else {
       widget._addTransaction(Transaction(title: titleController.text, amount: double.tryParse(amountController.text)));
-    }
+    // }
     Navigator.of(context).pop();
   }
 }
