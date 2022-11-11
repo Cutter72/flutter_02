@@ -26,7 +26,7 @@ class Chart extends StatelessWidget {
       weekAmountSum += dayAmountSum;
       return {'day': DateFormat.E(Intl.systemLocale).format(weekDay), 'amount': dayAmountSum};
     }).map((e) {
-      e['percent'] = (e['amount'] as double)/ weekAmountSum;
+      e['percent'] = weekAmountSum == 0.0 ? 0.0 : (e['amount'] as double) / weekAmountSum;
       return e;
     }).toList();
   }
@@ -35,23 +35,29 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      margin: EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ...summaryTransactionsPerDay
-              .map((e) {
-                return Column(
-                  children: [
-                    Text("\$${(e['amount'] as double).toStringAsFixed(0)}"),
-                    ChartBar(e['percent'] as double),
-                    Text("${e['day']}"),
-                  ],
-                );
-              })
-              .toList()
-              .reversed
-        ],
+      margin: EdgeInsets.all(12),
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ...summaryTransactionsPerDay
+                .map((e) {
+                  return Flexible(
+                    fit: FlexFit.tight,
+                    child: Column(
+                      children: [
+                        Text("\$${(e['amount'] as double).toStringAsFixed(0)}"),
+                        ChartBar(e['percent'] as double),
+                        Text("${e['day']}"),
+                      ],
+                    ),
+                  );
+                })
+                .toList()
+                .reversed
+          ],
+        ),
       ),
     );
   }
