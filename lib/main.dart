@@ -60,10 +60,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    // Transaction(title: "title1", amount: 1.99),
-    // Transaction(title: "title2", amount: 2.9),
-  ];
+  final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((transaction) {
@@ -77,12 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addTransaction(Transaction transaction) {
-    setState(() {
-      _transactions.add(transaction);
-    });
-  }
-
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
@@ -90,6 +81,18 @@ class _MyHomePageState extends State<MyHomePage> {
           return GestureDetector(
               onTap: () {}, behavior: HitTestBehavior.opaque, child: NewTransaction(_addTransaction));
         });
+  }
+
+  void _addTransaction(Transaction transaction) {
+    setState(() {
+      _transactions.add(transaction);
+    });
+  }
+
+  void _deleteTransaction(int id) {
+    setState(() {
+      _transactions.removeWhere((transaction) => transaction.id == id);
+    });
   }
 
   @override
@@ -104,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Chart(_recentTransactions),
-          TransactionList(_transactions),
+          TransactionList(_transactions, _deleteTransaction),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

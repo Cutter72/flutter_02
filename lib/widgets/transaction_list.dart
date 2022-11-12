@@ -7,9 +7,11 @@ import 'package:intl/intl.dart';
 ///
 class TransactionList extends StatelessWidget {
   late final List<Transaction> _transactions;
+  late final Function(int) _deleteTransaction;
 
-  TransactionList(List<Transaction> transactions) {
+  TransactionList(List<Transaction> transactions, Function(int) deleteTransaction) {
     _transactions = transactions;
+    _deleteTransaction = deleteTransaction;
   }
 
   @override
@@ -102,7 +104,7 @@ class TransactionList extends StatelessWidget {
                             Icons.delete,
                             color: Theme.of(context).errorColor,
                           ),
-                          onPressed: deleteTransaction,
+                          onPressed: () => _deleteTransaction(_transactions[i].id),
                         ),
                       ),
                     ],
@@ -112,6 +114,4 @@ class TransactionList extends StatelessWidget {
             ),
     );
   }
-
-  void deleteTransaction() {}
 }
