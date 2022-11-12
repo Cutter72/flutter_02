@@ -10,27 +10,29 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            height: 60,
-            width: 10,
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(
+    return LayoutBuilder(
+      builder: (buildContext , boxConstraints ) {
+        return Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              height: boxConstraints.maxHeight,
+              width: 10,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 1,
+                  )),
+            ),
+            Container(
+              height: boxConstraints.maxHeight * percent,
+              width: 10,
               color: Theme.of(context).primaryColor,
-              width: 1,
-            )),
-          ),
-          Container(
-            height: percent * 60,
-            width: 10,
-            color: Theme.of(context).primaryColor,
-          ),
-        ],
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

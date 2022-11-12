@@ -43,15 +43,14 @@ class Chart extends StatelessWidget {
           children: [
             ...summaryTransactionsPerDay
                 .map((dayData) {
-                  return Flexible(
-                    fit: FlexFit.tight,
+                  return Expanded(
                     child: Column(
                       children: [
                         SizedBox(
                           height: 20,
                           child: FittedBox(child: Text("\$${(dayData['amount'] as double).toStringAsFixed(0)}")),
                         ),
-                        ChartBar(dayData['percent'] as double),
+                        Expanded(child: ChartBar(dayData['percent'] as double)),
                         Text("${dayData['day']}"),
                       ],
                     ),
