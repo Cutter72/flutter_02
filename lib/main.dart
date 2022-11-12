@@ -123,7 +123,13 @@ class _MyHomePageState extends State<MyHomePage> {
         context: ctx,
         builder: (cCtx) {
           return GestureDetector(
-              onTap: () {}, behavior: HitTestBehavior.opaque, child: NewTransaction(_addTransaction));
+              onTap: () {},
+              behavior: HitTestBehavior.opaque,
+              child: SingleChildScrollView(
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(cCtx).viewInsets.bottom),
+                    child: NewTransaction(_addTransaction)),
+              ));
         });
   }
 
@@ -141,7 +147,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isInLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    final isInLandscape = mediaQuery.orientation == Orientation.landscape;
+    final theme = Theme.of(context);
     final appBar = AppBar(
       title: Text("flutter_02"),
       // actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
@@ -150,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(children: [
             Text("Chart"),
             Switch(
-              activeColor: Theme.of(context).colorScheme.secondary,
+              activeColor: theme.colorScheme.secondary,
               value: isChartEnabled,
               onChanged: (enabled) {
                 setState(() => isChartEnabled = enabled);
@@ -165,12 +173,12 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           if ((isInLandscape && isChartEnabled) || !isInLandscape)
             Container(
-              height: calculateHeight(context, appBar, isInLandscape ? 1.0 : 0.3),
+              height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.3),
               child: Chart(_recentTransactions),
             ),
           if ((isInLandscape && !isChartEnabled) || !isInLandscape)
             Container(
-              height: calculateHeight(context, appBar, isInLandscape ? 1.0 : 0.70),
+              height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.70),
               child: TransactionList(_transactions, _deleteTransaction),
             ),
         ],
@@ -181,12 +189,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  double calculateHeight(BuildContext context, AppBar appBar, double percent) {
+  double calculateHeight(MediaQueryData mediaQuery, AppBar appBar, double percent) {
     return max(
-        (MediaQuery.of(context).size.height -
-                MediaQuery.of(context).padding.top -
-                MediaQuery.of(context).padding.bottom -
-                appBar.preferredSize.height) *
+        (mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom - appBar.preferredSize.height) *
             percent,
         1);
   }
