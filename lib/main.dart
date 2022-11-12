@@ -97,22 +97,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text("flutter_02"),
+      actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: Text("flutter_02"),
-        actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
-      ),
+      appBar: appBar,
       body: ListView(
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Chart(_recentTransactions),
-          TransactionList(_transactions, _deleteTransaction),
+          Container(
+            height: calculateHeight(context, appBar, 0.25),
+            child: Chart(_recentTransactions),
+          ),
+          Container(
+            height: calculateHeight(context, appBar, 0.75),
+            child: TransactionList(_transactions, _deleteTransaction),
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton:
           FloatingActionButton(onPressed: () => _startAddNewTransaction(context), child: Icon(Icons.add)),
     );
+  }
+
+  double calculateHeight(BuildContext context, AppBar appBar, double percent) {
+    return (MediaQuery.of(context).size.height -
+            MediaQuery.of(context).padding.top -
+            MediaQuery.of(context).padding.bottom -
+            appBar.preferredSize.height) *
+        percent;
   }
 }
