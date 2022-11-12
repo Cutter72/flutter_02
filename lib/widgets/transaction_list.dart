@@ -39,7 +39,7 @@ class TransactionList extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Container(
-                      constraints: BoxConstraints(maxWidth: 120),
+                      constraints: BoxConstraints(maxWidth: 100),
                       margin: EdgeInsets.all(8),
                       padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                       decoration: BoxDecoration(
@@ -51,7 +51,9 @@ class TransactionList extends StatelessWidget {
                           child: Text(
                             maxLines: 1,
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor, fontSize: 18 * MediaQuery.of(context).textScaleFactor, fontWeight: FontWeight.bold),
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 18 * MediaQuery.of(context).textScaleFactor,
+                                fontWeight: FontWeight.bold),
                             "\$${_transactions[i].amount.toStringAsFixed(2)}",
                           ),
                         ),
@@ -81,12 +83,14 @@ class TransactionList extends StatelessWidget {
                               children: [
                                 Text(
                                   textAlign: TextAlign.justify,
-                                  style: TextStyle(fontSize: 14 * MediaQuery.of(context).textScaleFactor, color: Colors.grey),
+                                  style: TextStyle(
+                                      fontSize: 14 * MediaQuery.of(context).textScaleFactor, color: Colors.grey),
                                   "${DateFormat.Hms(Intl.systemLocale).format(_transactions[i].date)}",
                                 ),
                                 Text(
                                   textAlign: TextAlign.justify,
-                                  style: TextStyle(fontSize: 14 * MediaQuery.of(context).textScaleFactor, color: Colors.grey),
+                                  style: TextStyle(
+                                      fontSize: 14 * MediaQuery.of(context).textScaleFactor, color: Colors.grey),
                                   "${DateFormat.yMMMd(Intl.systemLocale).format(_transactions[i].date)}",
                                 ),
                               ],

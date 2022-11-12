@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_02/models/transaction.dart';
@@ -10,7 +12,10 @@ import 'package:intl/intl_standalone.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // needed for below settings
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]); // WidgetsFlutterBinding.ensureInitialized() must be run before these settings
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitUp
+  ]); // WidgetsFlutterBinding.ensureInitialized() must be run before these settings
   runApp(MyApp());
 }
 
@@ -127,10 +132,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   double calculateHeight(BuildContext context, AppBar appBar, double percent) {
-    return (MediaQuery.of(context).size.height -
-            MediaQuery.of(context).padding.top -
-            MediaQuery.of(context).padding.bottom -
-            appBar.preferredSize.height) *
-        percent;
+    return max(
+        (MediaQuery.of(context).size.height -
+                MediaQuery.of(context).padding.top -
+                MediaQuery.of(context).padding.bottom -
+                appBar.preferredSize.height) *
+            percent,
+        1);
   }
 }
