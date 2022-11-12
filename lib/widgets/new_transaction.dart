@@ -42,9 +42,7 @@ class _NewTransactionState extends State<NewTransaction> {
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(labelText: "Amount \$.\$\$", border: OutlineInputBorder()),
               controller: amountController,
-              onChanged: (input) => {print("onChanged: input=${amountController.text}")},
-              onEditingComplete: () => {print("onEditingComplete")},
-              onSubmitted: (input) => {submitTransaction()},
+              onSubmitted: (input) => submitTransaction(),
             ),
             SizedBox(
               width: double.infinity,
@@ -53,27 +51,29 @@ class _NewTransactionState extends State<NewTransaction> {
                     borderRadius: BorderRadius.all(Radius.circular(4)),
                     border: Border.all(color: Theme.of(context).disabledColor)),
                 child: TextButton(
+                  onPressed: showDatePickerToUser,
                   child: Text("Date: ${DateFormat.yMd(Intl.systemLocale).format(pickedDate)}", textAlign: TextAlign.justify),
-                  onPressed: () {
-                    showDatePicker(
-                            context: context, initialDate: today, firstDate: DateTime(today.year - 1), lastDate: today)
-                        .then((pickedDate) {
-                      if (pickedDate != null) {
-                        savePickedDate(pickedDate);
-                      }
-                    });
-                  },
                 ),
               ),
             ),
             ElevatedButton(
-              child: Text("Add transaction"),
               onPressed: submitTransaction,
+              child: Text("Add transaction"),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void showDatePickerToUser() {
+    showDatePicker(
+            context: context, initialDate: today, firstDate: DateTime(today.year - 1), lastDate: today)
+        .then((pickedDate) {
+      if (pickedDate != null) {
+        savePickedDate(pickedDate);
+      }
+    });
   }
 
   void savePickedDate(DateTime pickedDate) {
