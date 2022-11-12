@@ -95,6 +95,16 @@ class TransactionList extends StatelessWidget {
                           ],
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 4, 0),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).errorColor,
+                          ),
+                          onPressed: deleteTransaction,
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -102,4 +112,6 @@ class TransactionList extends StatelessWidget {
             ),
     );
   }
+
+  void deleteTransaction() {}
 }
