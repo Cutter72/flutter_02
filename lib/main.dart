@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_02/models/transaction.dart';
 import 'package:flutter_02/widgets/chart.dart';
 import 'package:flutter_02/widgets/new_transaction.dart';
@@ -8,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // needed for below settings
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitUp]); // WidgetsFlutterBinding.ensureInitialized() must be run before these settings
   runApp(MyApp());
 }
 
