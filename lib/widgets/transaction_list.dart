@@ -44,14 +44,14 @@ class TransactionList extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(4)),
-                          border: Border.all(color: Theme.of(context).primaryColor, width: 2)),
+                          border: Border.all(color: Theme.of(context).colorScheme.primary, width: 2)),
                       child: SizedBox(
                         height: 20,
                         child: FittedBox(
                           child: Text(
                             maxLines: 1,
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontSize: 18 * MediaQuery.of(context).textScaleFactor,
                                 fontWeight: FontWeight.bold),
                             "\$${_transactions[i].amount.toStringAsFixed(2)}",
@@ -71,7 +71,7 @@ class TransactionList extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
-                                  ?.copyWith(color: Theme.of(context).primaryColor),
+                                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
                               _transactions[i].title.toUpperCase(),
                             ),
                           ),

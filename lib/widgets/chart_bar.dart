@@ -11,7 +11,7 @@ class ChartBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (buildContext , boxConstraints ) {
+      builder: (buildContext, boxConstraints) {
         return Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -21,14 +21,14 @@ class ChartBar extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border.all(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     width: 1,
                   )),
             ),
             Container(
               height: boxConstraints.maxHeight * percent,
               width: 10,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ],
         );

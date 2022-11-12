@@ -11,12 +11,16 @@ import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 
 void main() {
+  // lockOrientation();
+  runApp(MyApp());
+}
+
+void lockOrientation() {
   WidgetsFlutterBinding.ensureInitialized(); // needed for below settings
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitUp
+    DeviceOrientation.portraitDown
   ]); // WidgetsFlutterBinding.ensureInitialized() must be run before these settings
-  runApp(MyApp());
 }
 
 ///
@@ -34,7 +38,38 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "QuickSand",
         primarySwatch: Colors.purple,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purpleAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple).copyWith(
+          secondary: Colors.amber,
+          // primary: Colors.green,
+          // onSurface: Colors.green,
+          // onPrimary: Colors.green,
+          // onBackground: Colors.green,
+          // onError: Colors.green,
+          // onErrorContainer: Colors.green,
+          // onInverseSurface: Colors.green,
+          // onPrimaryContainer: Colors.green,
+          // onSecondaryContainer: Colors.green,
+          // onSecondary: Colors.green,
+          // onSurfaceVariant: Colors.green,
+          // onTertiary: Colors.green,
+          // onTertiaryContainer: Colors.green,
+          // background: Colors.green,
+          // errorContainer: Colors.green,
+          // inversePrimary: Colors.green,
+          // secondaryVariant: Colors.green,
+          // error: Colors.green,
+          // inverseSurface: Colors.green,
+          // outline: Colors.green,
+          // primaryContainer: Colors.green,
+          // primaryVariant: Colors.green,
+          // secondaryContainer: Colors.green,
+          // shadow: Colors.green,
+          // surface: Colors.green,
+          // surfaceTint: Colors.green,
+          // surfaceVariant: Colors.green,
+          // tertiary: Colors.green,
+          // tertiaryContainer: Colors.green,
+        ),
         // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple),
         textTheme: ThemeData.light().textTheme.copyWith(
                 titleMedium: TextStyle(
@@ -69,6 +104,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
+  var isChartEnabled = true;
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((transaction) {
@@ -105,24 +141,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isInLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text("flutter_02"),
-      actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
+      // actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
+      actions: [
+        if (isInLandscape)
+          Row(children: [
+            Text("Chart"),
+            Switch(
+              activeColor: Theme.of(context).colorScheme.secondary,
+              value: isChartEnabled,
+              onChanged: (enabled) {
+                setState(() => isChartEnabled = enabled);
+              },
+            ),
+          ])
+      ],
     );
     return Scaffold(
       appBar: appBar,
       body: ListView(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Container(
-            height: calculateHeight(context, appBar, 0.3),
-            child: Chart(_recentTransactions),
-          ),
-          Container(
-            height: calculateHeight(context, appBar, 0.70),
-            child: TransactionList(_transactions, _deleteTransaction),
-          ),
+          if ((isInLandscape && isChartEnabled) || !isInLandscape)
+            Container(
+              height: calculateHeight(context, appBar, isInLandscape ? 1.0 : 0.3),
+              child: Chart(_recentTransactions),
+            ),
+          if ((isInLandscape && !isChartEnabled) || !isInLandscape)
+            Container(
+              height: calculateHeight(context, appBar, isInLandscape ? 1.0 : 0.70),
+              child: TransactionList(_transactions, _deleteTransaction),
+            ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
