@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_02/models/transaction.dart';
 import 'package:intl/intl.dart';
 
@@ -16,15 +17,42 @@ class NewTransaction extends StatefulWidget {
   State<NewTransaction> createState() => _NewTransactionState();
 }
 
+/// Extension functions for dimension operations.
+extension Dimens on num {
+  /// 1cm = 64 lp/fp (logical pixels/flutter pixels).
+  /// Calculated from 960px = 640lp/fp = 10cm also 540px = 360lp/fp = 5,6cm
+  static const _cm = 64.0;
+
+  double asCentimeters() {
+    return this * _cm;
+  }
+}
+
 class _NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
-
   final amountController = TextEditingController();
   var today = DateTime.now();
   var pickedDate = DateTime.now();
 
+  getDisplayMetrics() async {
+    final platform = MethodChannel("myChannel");
+    try {
+      final String dpi = await platform.invokeMethod("getDisplayMetrics");
+      print("getDisplayMetrics=$dpi");
+    } on PlatformException catch (err) {
+      print("getDisplayMetrics_err=$err");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    getDisplayMetrics();
+    final mqd = MediaQuery.of(context);
+    print("size=${mqd.size}");
+    print("devicePixelRatio=${mqd.devicePixelRatio}");
+    print("textScaleFactor=${mqd.textScaleFactor}");
+    print("displayFeatures=${mqd.displayFeatures}");
+
     return Container(
       margin: EdgeInsets.all(8),
       width: double.infinity,
@@ -34,7 +62,8 @@ class _NewTransactionState extends State<NewTransaction> {
           Container(
             height: 72,
             child: TextField(
-              decoration: InputDecoration(labelText: "Title", border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                  labelText: "Title", border: OutlineInputBorder()),
               controller: titleController,
             ),
           ),
@@ -42,7 +71,8 @@ class _NewTransactionState extends State<NewTransaction> {
             height: 72,
             child: TextField(
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: "Amount \$.\$\$", border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                  labelText: "Amount \$.\$\$", border: OutlineInputBorder()),
               controller: amountController,
               onSubmitted: (input) => submitTransaction(),
             ),
@@ -55,13 +85,14 @@ class _NewTransactionState extends State<NewTransaction> {
                   border: Border.all(color: Theme.of(context).disabledColor)),
               child: TextButton(
                 onPressed: showDatePickerToUser,
-                child:
-                    Text("Date: ${DateFormat.yMd(Intl.systemLocale).format(pickedDate)}", textAlign: TextAlign.justify),
+                child: Text(
+                    "Date: ${DateFormat.yMd(Intl.systemLocale).format(pickedDate)}",
+                    textAlign: TextAlign.justify),
               ),
             ),
           ),
           Container(
-            height: 60,
+            height: 1.asCentimeters(),
             margin: EdgeInsets.only(top: 12),
             child: ElevatedButton(
               onPressed: submitTransaction,
@@ -74,7 +105,11 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 
   void showDatePickerToUser() {
-    showDatePicker(context: context, initialDate: today, firstDate: DateTime(today.year - 1), lastDate: today)
+    showDatePicker(
+            context: context,
+            initialDate: today,
+            firstDate: DateTime(today.year - 1),
+            lastDate: today)
         .then((pickedDate) {
       if (pickedDate != null) {
         savePickedDate(pickedDate);
@@ -92,8 +127,10 @@ class _NewTransactionState extends State<NewTransaction> {
     // if (titleController.text.isEmpty || amountController.text.isEmpty) {
     //   return;
     // } else {
-    widget._addTransaction(
-        Transaction(title: titleController.text, amount: double.tryParse(amountController.text), date: pickedDate));
+    widget._addTransaction(Transaction(
+        title: titleController.text,
+        amount: double.tryParse(amountController.text),
+        date: pickedDate));
     // }
     Navigator.of(context).pop();
   }

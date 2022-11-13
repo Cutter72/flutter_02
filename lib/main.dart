@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,7 +83,10 @@ class MyApp extends StatelessWidget {
           titleTextStyle: ThemeData.light()
               .textTheme
               .copyWith(
-                titleLarge: TextStyle(fontFamily: "OpenSans", fontSize: 20, fontWeight: FontWeight.bold),
+                titleLarge: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               )
               .headline6,
         ),
@@ -127,7 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
               behavior: HitTestBehavior.opaque,
               child: SingleChildScrollView(
                 child: Padding(
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(cCtx).viewInsets.bottom),
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(cCtx).viewInsets.bottom),
                     child: NewTransaction(_addTransaction)),
               ));
         });
@@ -175,26 +180,33 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             if ((isInLandscape && isChartEnabled) || !isInLandscape)
               Container(
-                height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.3),
+                height: calculateHeight(
+                    mediaQuery, appBar, isInLandscape ? 1.0 : 0.3),
                 child: Chart(_recentTransactions),
               ),
             if ((isInLandscape && !isChartEnabled) || !isInLandscape)
               Container(
-                height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.70),
+                height: calculateHeight(
+                    mediaQuery, appBar, isInLandscape ? 1.0 : 0.70),
                 child: TransactionList(_transactions, _deleteTransaction),
               ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton:
-          FloatingActionButton(onPressed: () => _startAddNewTransaction(context), child: Icon(Icons.add)),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => _startAddNewTransaction(context),
+          child: Icon(Icons.add)),
     );
   }
 
-  double calculateHeight(MediaQueryData mediaQuery, AppBar appBar, double percent) {
+  double calculateHeight(
+      MediaQueryData mediaQuery, AppBar appBar, double percent) {
     return max(
-        (mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom - appBar.preferredSize.height) *
+        (mediaQuery.size.height -
+                mediaQuery.padding.top -
+                mediaQuery.padding.bottom -
+                appBar.preferredSize.height) *
             percent,
         1);
   }
