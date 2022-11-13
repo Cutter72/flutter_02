@@ -157,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (isInLandscape)
           Row(children: [
             Text("Chart"),
-            Switch(
+            Switch.adaptive(
               activeColor: theme.colorScheme.secondary,
               value: isChartEnabled,
               onChanged: (enabled) {
@@ -169,19 +169,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     return Scaffold(
       appBar: appBar,
-      body: ListView(
-        children: <Widget>[
-          if ((isInLandscape && isChartEnabled) || !isInLandscape)
-            Container(
-              height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.3),
-              child: Chart(_recentTransactions),
-            ),
-          if ((isInLandscape && !isChartEnabled) || !isInLandscape)
-            Container(
-              height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.70),
-              child: TransactionList(_transactions, _deleteTransaction),
-            ),
-        ],
+      body: SafeArea(
+        // SafeArea widget fixes iOS wrong placement
+        child: ListView(
+          children: <Widget>[
+            if ((isInLandscape && isChartEnabled) || !isInLandscape)
+              Container(
+                height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.3),
+                child: Chart(_recentTransactions),
+              ),
+            if ((isInLandscape && !isChartEnabled) || !isInLandscape)
+              Container(
+                height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.70),
+                child: TransactionList(_transactions, _deleteTransaction),
+              ),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton:
