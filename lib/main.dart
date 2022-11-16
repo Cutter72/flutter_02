@@ -1,15 +1,15 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_02/models/transaction.dart';
-import 'package:flutter_02/widgets/chart.dart';
-import 'package:flutter_02/widgets/new_transaction.dart';
-import 'package:flutter_02/widgets/transaction_list.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
+
+import '../models/transaction.dart';
+import '../widgets/chart.dart';
+import '../widgets/new_transaction.dart';
+import '../widgets/transaction_list.dart';
 
 void main() {
   // lockOrientation();
@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
         ),
         // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple),
         textTheme: ThemeData.light().textTheme.copyWith(
-                titleMedium: TextStyle(
+            titleMedium: const TextStyle(
               fontFamily: "OpenSans",
               fontSize: 14,
               fontWeight: FontWeight.bold,
@@ -83,15 +83,12 @@ class MyApp extends StatelessWidget {
           titleTextStyle: ThemeData.light()
               .textTheme
               .copyWith(
-                titleLarge: TextStyle(
-                    fontFamily: "OpenSans",
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                titleLarge: const TextStyle(fontFamily: "OpenSans", fontSize: 20, fontWeight: FontWeight.bold),
               )
               .headline6,
         ),
       ),
-      home: MyHomePage(),
+      home: _MyHomePage(),
     );
   }
 
@@ -101,18 +98,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class _MyHomePage extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<_MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<_MyHomePage> {
   final List<Transaction> _transactions = [];
   var isChartEnabled = true;
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((transaction) {
-      final borderDateTime = DateTime.now().subtract(Duration(days: 7));
+      final borderDateTime = DateTime.now().subtract(const Duration(days: 7));
       if (transaction.date.day >= borderDateTime.day &&
           transaction.date.month >= borderDateTime.month &&
           transaction.date.year >= borderDateTime.year) {
@@ -122,46 +119,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _startAddNewTransaction(BuildContext ctx) {
-    showModalBottomSheet(
-        context: ctx,
-        builder: (cCtx) {
-          return GestureDetector(
-              onTap: () {},
-              behavior: HitTestBehavior.opaque,
-              child: SingleChildScrollView(
-                child: Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(cCtx).viewInsets.bottom),
-                    child: NewTransaction(_addTransaction)),
-              ));
-        });
-  }
-
-  void _addTransaction(Transaction transaction) {
-    setState(() {
-      _transactions.add(transaction);
-    });
-  }
-
-  void _deleteTransaction(int id) {
-    setState(() {
-      _transactions.removeWhere((transaction) => transaction.id == id);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final isInLandscape = mediaQuery.orientation == Orientation.landscape;
     final theme = Theme.of(context);
     final appBar = AppBar(
-      title: Text("flutter_02"),
+      title: const Text("flutter_02"),
       // actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
       actions: [
         if (isInLandscape)
           Row(children: [
-            Text("Chart"),
+            const Text("Chart"),
             Switch.adaptive(
               activeColor: theme.colorScheme.secondary,
               value: isChartEnabled,
@@ -169,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() => isChartEnabled = enabled);
               },
             ),
-          ])
+          ]),
       ],
     );
     return Scaffold(
@@ -179,35 +148,76 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
           children: <Widget>[
             if ((isInLandscape && isChartEnabled) || !isInLandscape)
-              Container(
-                height: calculateHeight(
-                    mediaQuery, appBar, isInLandscape ? 1.0 : 0.3),
+              SizedBox(
+                height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.3),
                 child: Chart(_recentTransactions),
               ),
             if ((isInLandscape && !isChartEnabled) || !isInLandscape)
-              Container(
-                height: calculateHeight(
-                    mediaQuery, appBar, isInLandscape ? 1.0 : 0.70),
+              SizedBox(
+                height: calculateHeight(mediaQuery, appBar, isInLandscape ? 1.0 : 0.70),
                 child: TransactionList(_transactions, _deleteTransaction),
               ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-          onPressed: () => _startAddNewTransaction(context),
-          child: Icon(Icons.add)),
+      floatingActionButton:
+          FloatingActionButton(onPressed: () => _startAddNewTransaction(context), child: const Icon(Icons.add)),
     );
   }
 
-  double calculateHeight(
-      MediaQueryData mediaQuery, AppBar appBar, double percent) {
+  double calculateHeight(MediaQueryData mediaQuery, AppBar appBar, double percent) {
     return max(
-        (mediaQuery.size.height -
-                mediaQuery.padding.top -
-                mediaQuery.padding.bottom -
-                appBar.preferredSize.height) *
+        (mediaQuery.size.height - mediaQuery.padding.top - mediaQuery.padding.bottom - appBar.preferredSize.height) *
             percent,
         1);
+  }
+
+  void _deleteTransaction(int id) {
+    setState(() {
+      _transactions.removeWhere((transaction) => transaction.id == id);
+    });
+  }
+
+  void _startAddNewTransaction(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (bContext) {
+          return _ModalNewTransaction(
+            buildContext: bContext,
+            addTransaction: _addTransaction,
+          );
+        });
+  }
+
+  void _addTransaction(Transaction transaction) {
+    setState(() {
+      _transactions.add(transaction);
+    });
+  }
+}
+
+class _ModalNewTransaction extends StatelessWidget {
+  final BuildContext _buildContext;
+  final Function(Transaction transactionToAdd) _addTransaction;
+
+  const _ModalNewTransaction({
+    Key? key,
+    required BuildContext buildContext,
+    required Function(Transaction transactionToAdd) addTransaction,
+  })  : _buildContext = buildContext,
+        _addTransaction = addTransaction,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {},
+        behavior: HitTestBehavior.opaque,
+        child: SingleChildScrollView(
+          child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(_buildContext).viewInsets.bottom),
+              child: NewTransaction(_addTransaction)),
+        ));
   }
 }

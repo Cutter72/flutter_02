@@ -35,7 +35,7 @@ class _NewTransactionState extends State<NewTransaction> {
   var pickedDate = DateTime.now();
 
   getDisplayMetrics() async {
-    final platform = MethodChannel("myChannel");
+    const platform = MethodChannel("myChannel");
     try {
       final String dpi = await platform.invokeMethod("getDisplayMetrics");
       print("getDisplayMetrics=$dpi");
@@ -54,49 +54,40 @@ class _NewTransactionState extends State<NewTransaction> {
     print("displayFeatures=${mqd.displayFeatures}");
 
     return Container(
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
+          _InputTitle(titleController: titleController),
+          SizedBox(
             height: 72,
             child: TextField(
-              decoration: InputDecoration(
-                  labelText: "Title", border: OutlineInputBorder()),
-              controller: titleController,
-            ),
-          ),
-          Container(
-            height: 72,
-            child: TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                  labelText: "Amount \$.\$\$", border: OutlineInputBorder()),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(labelText: "Amount \$.\$\$", border: OutlineInputBorder()),
               controller: amountController,
               onSubmitted: (input) => submitTransaction(),
             ),
           ),
-          Container(
+          SizedBox(
             height: 60,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
                   border: Border.all(color: Theme.of(context).disabledColor)),
               child: TextButton(
                 onPressed: showDatePickerToUser,
-                child: Text(
-                    "Date: ${DateFormat.yMd(Intl.systemLocale).format(pickedDate)}",
-                    textAlign: TextAlign.justify),
+                child:
+                    Text("Date: ${DateFormat.yMd(Intl.systemLocale).format(pickedDate)}", textAlign: TextAlign.justify),
               ),
             ),
           ),
           Container(
             height: 1.asCentimeters(),
-            margin: EdgeInsets.only(top: 12),
+            margin: const EdgeInsets.only(top: 12),
             child: ElevatedButton(
               onPressed: submitTransaction,
-              child: Text("Add transaction"),
+              child: const Text("Add transaction"),
             ),
           ),
         ],
@@ -127,11 +118,29 @@ class _NewTransactionState extends State<NewTransaction> {
     // if (titleController.text.isEmpty || amountController.text.isEmpty) {
     //   return;
     // } else {
-    widget._addTransaction(Transaction(
-        title: titleController.text,
-        amount: double.tryParse(amountController.text),
-        date: pickedDate));
+    widget._addTransaction(
+        Transaction(title: titleController.text, amount: double.tryParse(amountController.text), date: pickedDate));
     // }
     Navigator.of(context).pop();
+  }
+}
+
+class _InputTitle extends StatelessWidget {
+  const _InputTitle({
+    Key? key,
+    required this.titleController,
+  }) : super(key: key);
+
+  final TextEditingController titleController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 72,
+      child: TextField(
+        decoration: const InputDecoration(labelText: "Title", border: OutlineInputBorder()),
+        controller: titleController,
+      ),
+    );
   }
 }
