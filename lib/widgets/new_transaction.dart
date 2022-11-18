@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_02/models/transaction.dart';
@@ -35,12 +37,14 @@ class _NewTransactionState extends State<NewTransaction> {
   var pickedDate = DateTime.now();
 
   getDisplayMetrics() async {
-    const platform = MethodChannel("myChannel");
-    try {
-      final String dpi = await platform.invokeMethod("getDisplayMetrics");
-      print("getDisplayMetrics=$dpi");
-    } on PlatformException catch (err) {
-      print("getDisplayMetrics_err=$err");
+    if (Platform.isAndroid) {
+      const platform = MethodChannel("myChannel");
+      try {
+        final String dpi = await platform.invokeMethod("getDisplayMetrics");
+        print("getDisplayMetrics=$dpi");
+      } on PlatformException catch (err) {
+        print("getDisplayMetrics_err=$err");
+      }
     }
   }
 
@@ -96,11 +100,7 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 
   void showDatePickerToUser() {
-    showDatePicker(
-            context: context,
-            initialDate: today,
-            firstDate: DateTime(today.year - 1),
-            lastDate: today)
+    showDatePicker(context: context, initialDate: today, firstDate: DateTime(today.year - 1), lastDate: today)
         .then((pickedDate) {
       if (pickedDate != null) {
         savePickedDate(pickedDate);
